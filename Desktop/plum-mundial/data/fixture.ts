@@ -7,7 +7,7 @@ export type Equipo = {
 
 export type Partido = {
   id: string
-  fase: 'grupos' | 'octavos' | 'cuartos' | 'semifinal' | 'final' | 'tercero'
+  fase: 'grupos' | 'dieciseisavos' | 'octavos' | 'cuartos' | 'semifinal' | 'final' | 'tercero'
   grupo?: string
   fecha: string
   hora: string
@@ -121,31 +121,59 @@ export const PARTIDOS_GRUPOS: Partido[] = [
 
 // Fases eliminatorias (con slots vacíos que se completan)
 export const PARTIDOS_ELIMINATORIOS: Partido[] = [
-  { id: 'R32_1',  fase: 'octavos',    fecha: '28 Jun', hora: '18:00', local: '1A', visitante: '2B', estadio: 'MetLife Stadium' },
-  { id: 'R32_2',  fase: 'octavos',    fecha: '28 Jun', hora: '21:00', local: '1B', visitante: '2A', estadio: 'SoFi Stadium' },
-  { id: 'R32_3',  fase: 'octavos',    fecha: '29 Jun', hora: '18:00', local: '1C', visitante: '2D', estadio: 'Rose Bowl' },
-  { id: 'R32_4',  fase: 'octavos',    fecha: '29 Jun', hora: '21:00', local: '1D', visitante: '2C', estadio: 'AT&T Stadium' },
-  { id: 'R32_5',  fase: 'octavos',    fecha: '30 Jun', hora: '18:00', local: '1E', visitante: '2F', estadio: 'Levi\'s Stadium' },
-  { id: 'R32_6',  fase: 'octavos',    fecha: '30 Jun', hora: '21:00', local: '1F', visitante: '2E', estadio: 'Arrowhead Stadium' },
-  { id: 'R32_7',  fase: 'octavos',    fecha: '01 Jul', hora: '18:00', local: '1G', visitante: '2H', estadio: 'MetLife Stadium' },
-  { id: 'R32_8',  fase: 'octavos',    fecha: '01 Jul', hora: '21:00', local: '1H', visitante: '2G', estadio: 'SoFi Stadium' },
-  { id: 'QF_1',   fase: 'cuartos',    fecha: '05 Jul', hora: '21:00', local: 'W R32_1', visitante: 'W R32_2', estadio: 'MetLife Stadium' },
-  { id: 'QF_2',   fase: 'cuartos',    fecha: '06 Jul', hora: '21:00', local: 'W R32_3', visitante: 'W R32_4', estadio: 'Rose Bowl' },
-  { id: 'QF_3',   fase: 'cuartos',    fecha: '07 Jul', hora: '21:00', local: 'W R32_5', visitante: 'W R32_6', estadio: 'AT&T Stadium' },
-  { id: 'QF_4',   fase: 'cuartos',    fecha: '08 Jul', hora: '21:00', local: 'W R32_7', visitante: 'W R32_8', estadio: 'SoFi Stadium' },
-  { id: 'SF_1',   fase: 'semifinal',  fecha: '14 Jul', hora: '21:00', local: 'W QF_1', visitante: 'W QF_2', estadio: 'MetLife Stadium' },
-  { id: 'SF_2',   fase: 'semifinal',  fecha: '15 Jul', hora: '21:00', local: 'W QF_3', visitante: 'W QF_4', estadio: 'Rose Bowl' },
-  { id: 'TER',    fase: 'tercero',    fecha: '18 Jul', hora: '18:00', local: 'L SF_1', visitante: 'L SF_2', estadio: 'AT&T Stadium' },
-  { id: 'FINAL',  fase: 'final',      fecha: '19 Jul', hora: '21:00', local: 'W SF_1', visitante: 'W SF_2', estadio: 'MetLife Stadium' },
+  // DIECISEISAVOS (32 → 16) — 16 partidos
+  { id: 'D16_1',  fase: 'dieciseisavos', fecha: '27 Jun', hora: '18:00', local: '1A', visitante: '3DEF', estadio: 'MetLife Stadium' },
+  { id: 'D16_2',  fase: 'dieciseisavos', fecha: '27 Jun', hora: '21:00', local: '1C', visitante: '3ABF', estadio: 'SoFi Stadium' },
+  { id: 'D16_3',  fase: 'dieciseisavos', fecha: '28 Jun', hora: '18:00', local: '1B', visitante: '3ACD', estadio: 'Rose Bowl' },
+  { id: 'D16_4',  fase: 'dieciseisavos', fecha: '28 Jun', hora: '21:00', local: '1D', visitante: '3BCE', estadio: 'AT&T Stadium' },
+  { id: 'D16_5',  fase: 'dieciseisavos', fecha: '29 Jun', hora: '18:00', local: '1E', visitante: '3GHI', estadio: 'Levi\'s Stadium' },
+  { id: 'D16_6',  fase: 'dieciseisavos', fecha: '29 Jun', hora: '21:00', local: '1G', visitante: '3EFH', estadio: 'Arrowhead Stadium' },
+  { id: 'D16_7',  fase: 'dieciseisavos', fecha: '30 Jun', hora: '18:00', local: '1F', visitante: '3IJK', estadio: 'MetLife Stadium' },
+  { id: 'D16_8',  fase: 'dieciseisavos', fecha: '30 Jun', hora: '21:00', local: '1H', visitante: '3JKL', estadio: 'SoFi Stadium' },
+  { id: 'D16_9',  fase: 'dieciseisavos', fecha: '01 Jul', hora: '18:00', local: '1I', visitante: '2L', estadio: 'Rose Bowl' },
+  { id: 'D16_10', fase: 'dieciseisavos', fecha: '01 Jul', hora: '21:00', local: '1K', visitante: '2J', estadio: 'AT&T Stadium' },
+  { id: 'D16_11', fase: 'dieciseisavos', fecha: '02 Jul', hora: '18:00', local: '1J', visitante: '2K', estadio: 'Levi\'s Stadium' },
+  { id: 'D16_12', fase: 'dieciseisavos', fecha: '02 Jul', hora: '21:00', local: '1L', visitante: '2I', estadio: 'Arrowhead Stadium' },
+  { id: 'D16_13', fase: 'dieciseisavos', fecha: '03 Jul', hora: '18:00', local: '2A', visitante: '2D', estadio: 'MetLife Stadium' },
+  { id: 'D16_14', fase: 'dieciseisavos', fecha: '03 Jul', hora: '21:00', local: '2B', visitante: '2C', estadio: 'SoFi Stadium' },
+  { id: 'D16_15', fase: 'dieciseisavos', fecha: '04 Jul', hora: '18:00', local: '2E', visitante: '2H', estadio: 'Rose Bowl' },
+  { id: 'D16_16', fase: 'dieciseisavos', fecha: '04 Jul', hora: '21:00', local: '2F', visitante: '2G', estadio: 'AT&T Stadium' },
+
+  // OCTAVOS (16 → 8) — 8 partidos
+  { id: 'R16_1',  fase: 'octavos', fecha: '07 Jul', hora: '18:00', local: 'W D16_1', visitante: 'W D16_2', estadio: 'MetLife Stadium' },
+  { id: 'R16_2',  fase: 'octavos', fecha: '07 Jul', hora: '21:00', local: 'W D16_3', visitante: 'W D16_4', estadio: 'SoFi Stadium' },
+  { id: 'R16_3',  fase: 'octavos', fecha: '08 Jul', hora: '18:00', local: 'W D16_5', visitante: 'W D16_6', estadio: 'Rose Bowl' },
+  { id: 'R16_4',  fase: 'octavos', fecha: '08 Jul', hora: '21:00', local: 'W D16_7', visitante: 'W D16_8', estadio: 'AT&T Stadium' },
+  { id: 'R16_5',  fase: 'octavos', fecha: '09 Jul', hora: '18:00', local: 'W D16_9', visitante: 'W D16_10', estadio: 'Levi\'s Stadium' },
+  { id: 'R16_6',  fase: 'octavos', fecha: '09 Jul', hora: '21:00', local: 'W D16_11', visitante: 'W D16_12', estadio: 'Arrowhead Stadium' },
+  { id: 'R16_7',  fase: 'octavos', fecha: '10 Jul', hora: '18:00', local: 'W D16_13', visitante: 'W D16_14', estadio: 'MetLife Stadium' },
+  { id: 'R16_8',  fase: 'octavos', fecha: '10 Jul', hora: '21:00', local: 'W D16_15', visitante: 'W D16_16', estadio: 'SoFi Stadium' },
+
+  // CUARTOS
+  { id: 'QF_1',   fase: 'cuartos',   fecha: '13 Jul', hora: '21:00', local: 'W R16_1', visitante: 'W R16_2', estadio: 'MetLife Stadium' },
+  { id: 'QF_2',   fase: 'cuartos',   fecha: '14 Jul', hora: '21:00', local: 'W R16_3', visitante: 'W R16_4', estadio: 'Rose Bowl' },
+  { id: 'QF_3',   fase: 'cuartos',   fecha: '15 Jul', hora: '21:00', local: 'W R16_5', visitante: 'W R16_6', estadio: 'AT&T Stadium' },
+  { id: 'QF_4',   fase: 'cuartos',   fecha: '16 Jul', hora: '21:00', local: 'W R16_7', visitante: 'W R16_8', estadio: 'SoFi Stadium' },
+
+  // SEMIFINALES
+  { id: 'SF_1',   fase: 'semifinal', fecha: '19 Jul', hora: '21:00', local: 'W QF_1', visitante: 'W QF_2', estadio: 'MetLife Stadium' },
+  { id: 'SF_2',   fase: 'semifinal', fecha: '20 Jul', hora: '21:00', local: 'W QF_3', visitante: 'W QF_4', estadio: 'Rose Bowl' },
+
+  // TERCER PUESTO
+  { id: 'TER',    fase: 'tercero',   fecha: '25 Jul', hora: '18:00', local: 'L SF_1', visitante: 'L SF_2', estadio: 'AT&T Stadium' },
+
+  // FINAL
+  { id: 'FINAL',  fase: 'final',     fecha: '26 Jul', hora: '21:00', local: 'W SF_1', visitante: 'W SF_2', estadio: 'MetLife Stadium' },
 ]
 
 export const GRUPOS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
 
 export const FASE_LABELS: Record<string, string> = {
-  grupos:    '⚽ Fase de Grupos',
-  octavos:   '⚡ Octavos de Final',
-  cuartos:   '🔥 Cuartos de Final',
-  semifinal: '🌟 Semifinales',
-  tercero:   '🥉 Tercer Puesto',
-  final:     '🏆 Gran Final',
+  grupos:         '⚽ Fase de Grupos',
+  dieciseisavos:  '🔱 Dieciseisavos de Final',
+  octavos:        '⚡ Octavos de Final',
+  cuartos:        '🔥 Cuartos de Final',
+  semifinal:      '🌟 Semifinales',
+  tercero:        '🥉 Tercer Puesto',
+  final:          '🏆 Gran Final',
 }

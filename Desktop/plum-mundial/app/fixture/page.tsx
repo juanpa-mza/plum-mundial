@@ -6,7 +6,7 @@ import { PARTIDOS_GRUPOS, PARTIDOS_ELIMINATORIOS, EQUIPOS, FASE_LABELS, type Par
 import { cargarResultados, guardarResultados, cargarUsuario, generarURLCompartir } from '@/lib/prode'
 import { Home, BarChart2, Share2, Instagram, Check, Trophy } from 'lucide-react'
 
-const FASES_ORDEN = ['grupos', 'octavos', 'cuartos', 'semifinal', 'tercero', 'final'] as const
+const FASES_ORDEN = ['grupos', 'dieciseisavos', 'octavos', 'cuartos', 'semifinal', 'tercero', 'final'] as const
 
 export default function FixturePage() {
   const router = useRouter()
@@ -116,6 +116,7 @@ export default function FixturePage() {
               }`}
             >
               {fase === 'grupos' ? '⚽ Grupos' :
+               fase === 'dieciseisavos' ? '🔱 16avos' :
                fase === 'octavos' ? '⚡ Octavos' :
                fase === 'cuartos' ? '🔥 Cuartos' :
                fase === 'semifinal' ? '🌟 Semis' :

@@ -111,8 +111,8 @@ export const PARTIDOS_GRUPOS: Partido[] = [
   { id:'C6', numero:50, fase:'grupos', grupo:'C', fecha:'24 Jun', hora:'22:00', local:'MAR', visitante:'HAI', estadio:'Mercedes-Benz Stadium, Atlanta', jornada:3 },
   // ── GRUPO D ──
   { id:'D1', numero:4,  fase:'grupos', grupo:'D', fecha:'12 Jun', hora:'22:00', local:'USA', visitante:'PAR', estadio:'SoFi Stadium, Los Ángeles', jornada:1 },
-  { id:'D2', numero:6,  fase:'grupos', grupo:'D', fecha:'13 Jun', hora:'01:00', local:'AUS', visitante:'TUR', estadio:'Estadio BC Place, Vancouver', jornada:1 },
-  { id:'D3', numero:31, fase:'grupos', grupo:'D', fecha:'19 Jun', hora:'01:00', local:'TUR', visitante:'PAR', estadio:"Levi's Stadium, San Francisco", jornada:2 },
+  { id:'D2', numero:6,  fase:'grupos', grupo:'D', fecha:'14 Jun', hora:'01:00', local:'AUS', visitante:'TUR', estadio:'Estadio BC Place, Vancouver', jornada:1 },
+  { id:'D3', numero:31, fase:'grupos', grupo:'D', fecha:'20 Jun', hora:'01:00', local:'TUR', visitante:'PAR', estadio:"Levi's Stadium, San Francisco", jornada:2 },
   { id:'D4', numero:32, fase:'grupos', grupo:'D', fecha:'19 Jun', hora:'16:00', local:'USA', visitante:'AUS', estadio:'Lumen Field, Seattle', jornada:2 },
   { id:'D5', numero:59, fase:'grupos', grupo:'D', fecha:'25 Jun', hora:'23:00', local:'TUR', visitante:'USA', estadio:'SoFi Stadium, Los Ángeles', jornada:3 },
   { id:'D6', numero:60, fase:'grupos', grupo:'D', fecha:'25 Jun', hora:'23:00', local:'PAR', visitante:'AUS', estadio:"Levi's Stadium, San Francisco", jornada:3 },
@@ -127,7 +127,7 @@ export const PARTIDOS_GRUPOS: Partido[] = [
   { id:'F1', numero:11, fase:'grupos', grupo:'F', fecha:'14 Jun', hora:'17:00', local:'HOL', visitante:'JPN', estadio:'AT&T Stadium, Dallas', jornada:1 },
   { id:'F2', numero:12, fase:'grupos', grupo:'F', fecha:'14 Jun', hora:'23:00', local:'SWE', visitante:'TUN', estadio:'Estadio BBVA, Monterrey', jornada:1 },
   { id:'F3', numero:35, fase:'grupos', grupo:'F', fecha:'20 Jun', hora:'14:00', local:'HOL', visitante:'SWE', estadio:'NRG Stadium, Houston', jornada:2 },
-  { id:'F4', numero:36, fase:'grupos', grupo:'F', fecha:'20 Jun', hora:'01:00', local:'TUN', visitante:'JPN', estadio:'Estadio BBVA, Monterrey', jornada:2 },
+  { id:'F4', numero:36, fase:'grupos', grupo:'F', fecha:'21 Jun', hora:'01:00', local:'TUN', visitante:'JPN', estadio:'Estadio BBVA, Monterrey', jornada:2 },
   { id:'F5', numero:57, fase:'grupos', grupo:'F', fecha:'25 Jun', hora:'20:00', local:'JPN', visitante:'SWE', estadio:'Arrowhead Stadium, Kansas City', jornada:3 },
   { id:'F6', numero:58, fase:'grupos', grupo:'F', fecha:'25 Jun', hora:'20:00', local:'TUN', visitante:'HOL', estadio:'AT&T Stadium, Dallas', jornada:3 },
   // ── GRUPO G ──
@@ -135,8 +135,8 @@ export const PARTIDOS_GRUPOS: Partido[] = [
   { id:'G2', numero:16, fase:'grupos', grupo:'G', fecha:'15 Jun', hora:'22:00', local:'BEL', visitante:'EGY', estadio:'Lumen Field, Seattle', jornada:1 },
   { id:'G3', numero:39, fase:'grupos', grupo:'G', fecha:'21 Jun', hora:'16:00', local:'BEL', visitante:'IRN', estadio:'SoFi Stadium, Los Ángeles', jornada:2 },
   { id:'G4', numero:40, fase:'grupos', grupo:'G', fecha:'21 Jun', hora:'22:00', local:'NZL', visitante:'EGY', estadio:'Estadio BC Place, Vancouver', jornada:2 },
-  { id:'G5', numero:64, fase:'grupos', grupo:'G', fecha:'26 Jun', hora:'00:00', local:'NZL', visitante:'BEL', estadio:'Estadio BC Place, Vancouver', jornada:3 },
-  { id:'G6', numero:63, fase:'grupos', grupo:'G', fecha:'26 Jun', hora:'00:00', local:'EGY', visitante:'IRN', estadio:'Lumen Field, Seattle', jornada:3 },
+  { id:'G5', numero:64, fase:'grupos', grupo:'G', fecha:'27 Jun', hora:'00:00', local:'NZL', visitante:'BEL', estadio:'Estadio BC Place, Vancouver', jornada:3 },
+  { id:'G6', numero:63, fase:'grupos', grupo:'G', fecha:'27 Jun', hora:'00:00', local:'EGY', visitante:'IRN', estadio:'Lumen Field, Seattle', jornada:3 },
   // ── GRUPO H ──
   { id:'H1', numero:14, fase:'grupos', grupo:'H', fecha:'15 Jun', hora:'13:00', local:'ESP', visitante:'CPV', estadio:'Mercedes-Benz Stadium, Atlanta', jornada:1 },
   { id:'H2', numero:13, fase:'grupos', grupo:'H', fecha:'15 Jun', hora:'19:00', local:'KSA', visitante:'URU', estadio:'Hard Rock Stadium, Miami', jornada:1 },
@@ -153,9 +153,9 @@ export const PARTIDOS_GRUPOS: Partido[] = [
   { id:'I6', numero:62, fase:'grupos', grupo:'I', fecha:'26 Jun', hora:'16:00', local:'SEN', visitante:'IRQ', estadio:'BMO Field, Toronto', jornada:3 },
   // ── GRUPO J ──
   { id:'J1', numero:19, fase:'grupos', grupo:'J', fecha:'16 Jun', hora:'22:00', local:'ARG', visitante:'DZA', estadio:'Arrowhead Stadium, Kansas City', jornada:1 },
-  { id:'J2', numero:20, fase:'grupos', grupo:'J', fecha:'16 Jun', hora:'01:00', local:'AUT', visitante:'JOR', estadio:"Levi's Stadium, San Francisco", jornada:1 },
+  { id:'J2', numero:20, fase:'grupos', grupo:'J', fecha:'17 Jun', hora:'01:00', local:'AUT', visitante:'JOR', estadio:"Levi's Stadium, San Francisco", jornada:1 },
   { id:'J3', numero:43, fase:'grupos', grupo:'J', fecha:'22 Jun', hora:'14:00', local:'ARG', visitante:'AUT', estadio:'AT&T Stadium, Dallas', jornada:2 },
-  { id:'J4', numero:44, fase:'grupos', grupo:'J', fecha:'22 Jun', hora:'00:00', local:'JOR', visitante:'DZA', estadio:"Levi's Stadium, San Francisco", jornada:2 },
+  { id:'J4', numero:44, fase:'grupos', grupo:'J', fecha:'23 Jun', hora:'00:00', local:'JOR', visitante:'DZA', estadio:"Levi's Stadium, San Francisco", jornada:2 },
   { id:'J5', numero:70, fase:'grupos', grupo:'J', fecha:'27 Jun', hora:'23:00', local:'JOR', visitante:'ARG', estadio:'AT&T Stadium, Dallas', jornada:3 },
   { id:'J6', numero:69, fase:'grupos', grupo:'J', fecha:'27 Jun', hora:'23:00', local:'DZA', visitante:'AUT', estadio:'Arrowhead Stadium, Kansas City', jornada:3 },
   // ── GRUPO K ──
@@ -188,7 +188,7 @@ export const PARTIDOS_ELIMINATORIOS: Partido[] = [
   { id:'P82', numero:82, fase:'dieciseisavos', fecha:'1 Jul',  hora:'21:00', local:'1G', visitante:'3A/E/H/I/J', estadio:'Lumen Field, Seattle' },
   { id:'P83', numero:83, fase:'dieciseisavos', fecha:'2 Jul',  hora:'16:00', local:'2K', visitante:'2L', estadio:'Est. Nacional de Canadá, Toronto' },
   { id:'P84', numero:84, fase:'dieciseisavos', fecha:'2 Jul',  hora:'20:00', local:'1H', visitante:'2J', estadio:'SoFi Stadium, Los Ángeles' },
-  { id:'P85', numero:85, fase:'dieciseisavos', fecha:'2 Jul',  hora:'00:00', local:'1B', visitante:'3E/F/G/I/J', estadio:'Estadio BC Place, Vancouver' },
+  { id:'P85', numero:85, fase:'dieciseisavos', fecha:'3 Jul',  hora:'00:00', local:'1B', visitante:'3E/F/G/I/J', estadio:'Estadio BC Place, Vancouver' },
   { id:'P86', numero:86, fase:'dieciseisavos', fecha:'3 Jul',  hora:'15:00', local:'1J', visitante:'2H', estadio:'Hard Rock Stadium, Miami' },
   { id:'P87', numero:87, fase:'dieciseisavos', fecha:'3 Jul',  hora:'17:00', local:'1K', visitante:'3D/E/I/J/L', estadio:'Arrowhead Stadium, Kansas City' },
   { id:'P88', numero:88, fase:'dieciseisavos', fecha:'3 Jul',  hora:'22:00', local:'2D', visitante:'2G', estadio:'AT&T Stadium, Dallas' },

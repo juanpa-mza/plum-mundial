@@ -4,13 +4,30 @@ import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { PARTIDOS_GRUPOS, PARTIDOS_ELIMINATORIOS, EQUIPOS, FASE_LABELS, type Partido, type Resultado } from '@/data/fixture'
 import { cargarResultados, guardarResultados, cargarUsuario, generarURLCompartir } from '@/lib/prode'
-import { Home, BarChart2, Share2, Instagram, Check, Trophy } from 'lucide-react'
+import { Home, BarChart2, Share2, Check, Edit2 } from 'lucide-react'
 
 const FASES_ORDEN = ['grupos', 'dieciseisavos', 'octavos', 'cuartos', 'semifinal', 'tercero', 'final'] as const
+
+// Mapa de banderas para fases eliminatorias
+const BANDERAS: Record<string, string> = {
+  // Grupos
+  '1A':'🇲🇽','2A':'🇲🇽','1B':'🇨🇦','2B':'🇨🇦','1C':'🇧🇷','2C':'🇧🇷',
+  '1D':'🇺🇸','2D':'🇺🇸','1E':'🇩🇪','2E':'🇩🇪','1F':'🇳🇱','2F':'🇳🇱',
+  '1G':'🇮🇷','2G':'🇮🇷','1H':'🇪🇸','2H':'🇪🇸','1I':'🇫🇷','2I':'🇫🇷',
+  '1J':'🇦🇷','2J':'🇦🇷','1K':'🇵🇹','2K':'🇵🇹','1L':'🏴󠁧󠁢󠁥󠁮󠁧󠁿','2L':'🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+}
+
+function getBandera(codigo: string, equiposPersonalizados: Record<string, string>): string {
+  if (equiposPersonalizados[codigo]) return ''
+  const eq = EQUIPOS.find(e => e.codigo === codigo)
+  if (eq) return eq.bandera
+  return BANDERAS[codigo] || '🏳️'
+}
 
 export default function FixturePage() {
   const router = useRouter()
   const [resultados, setResultados] = useState<Record<string, Resultado>>({})
+  const [equiposPersonalizados, setEquiposPersonalizados] = useState<Record<string, string>>({})
   const [faseActiva, setFaseActiva] = useState<string>('grupos')
   const [grupoActivo, setGrupoActivo] = useState('A')
   const [guardado, setGuardado] = useState(false)
@@ -22,6 +39,8 @@ export default function FixturePage() {
     setMounted(true)
     setResultados(cargarResultados())
     setUsuario(cargarUsuario())
+    const saved = localStorage.getItem('plum_equipos_custom')
+    if (saved) setEquiposPersonalizados(JSON.parse(saved))
   }, [])
 
   const handleScore = useCallback((partidoId: string, lado: 'local' | 'visitante', valor: string) => {
@@ -31,7 +50,7 @@ export default function FixturePage() {
         ...prev,
         [partidoId]: {
           partido_id: partidoId,
-          goles_local:    lado === 'local'    ? num : (prev[partidoId]?.goles_local    ?? null),
+          goles_local:     lado === 'local'     ? num : (prev[partidoId]?.goles_local     ?? null),
           goles_visitante: lado === 'visitante' ? num : (prev[partidoId]?.goles_visitante ?? null),
         }
       }
@@ -40,6 +59,14 @@ export default function FixturePage() {
     })
     setGuardado(true)
     setTimeout(() => setGuardado(false), 1500)
+  }, [])
+
+  const handleEquipoPersonalizado = useCallback((key: string, valor: string) => {
+    setEquiposPersonalizados(prev => {
+      const nuevo = { ...prev, [key]: valor }
+      localStorage.setItem('plum_equipos_custom', JSON.stringify(nuevo))
+      return nuevo
+    })
   }, [])
 
   const getEquipo = (codigo: string) => EQUIPOS.find(e => e.codigo === codigo)
@@ -65,6 +92,8 @@ export default function FixturePage() {
   }
 
   if (!mounted) return <LoadingScreen />
+
+  const esEliminatoria = faseActiva !== 'grupos'
 
   return (
     <main className="min-h-dvh bg-plum-dark flex flex-col">
@@ -106,7 +135,7 @@ export default function FixturePage() {
         </div>
 
         {/* Tabs de fases */}
-        <div className="flex gap-1.5 px-4 pb-3 overflow-x-auto scrollbar-hide">
+        <div className="flex gap-1.5 px-4 pb-3 overflow-x-auto">
           {FASES_ORDEN.map(fase => (
             <button
               key={fase}
@@ -145,32 +174,42 @@ export default function FixturePage() {
 
       {/* Contenido */}
       <div className="flex-1 px-4 py-4 space-y-3 pb-24">
-        {faseActiva === 'grupos' && (
-          <div className="text-center mb-2">
-            <span className="font-display text-2xl text-white/80">GRUPO {grupoActivo}</span>
-          </div>
-        )}
+        <div className="text-center mb-2">
+          <span className="font-display text-2xl text-white/80">
+            {faseActiva === 'grupos' ? `GRUPO ${grupoActivo}` : FASE_LABELS[faseActiva]}
+          </span>
+        </div>
 
-        {faseActiva !== 'grupos' && (
-          <div className="text-center mb-2">
-            <span className="font-display text-2xl text-white/80">
-              {FASE_LABELS[faseActiva]}
-            </span>
+        {esEliminatoria && (
+          <div className="flex items-center gap-2 bg-white/5 rounded-xl px-3 py-2 text-xs text-white/40 border border-white/10">
+            <Edit2 className="w-3 h-3 flex-shrink-0" />
+            Tocá el nombre del equipo para editarlo
           </div>
         )}
 
         {partidosFase.map(partido => (
-          <MatchCard
-            key={partido.id}
-            partido={partido}
-            resultado={resultados[partido.id]}
-            getEquipo={getEquipo}
-            onScore={handleScore}
-          />
+          esEliminatoria ? (
+            <EliminatoriaCard
+              key={partido.id}
+              partido={partido}
+              resultado={resultados[partido.id]}
+              equiposPersonalizados={equiposPersonalizados}
+              onScore={handleScore}
+              onEquipo={handleEquipoPersonalizado}
+              getBandera={getBandera}
+            />
+          ) : (
+            <MatchCard
+              key={partido.id}
+              partido={partido}
+              resultado={resultados[partido.id]}
+              getEquipo={getEquipo}
+              onScore={handleScore}
+            />
+          )
         ))}
       </div>
 
-      {/* Toast guardado */}
       {guardado && (
         <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 bg-green-600 text-white rounded-2xl px-4 py-2 flex items-center gap-2 text-sm font-bold animate-pop shadow-lg">
           <Check className="w-4 h-4" />
@@ -178,7 +217,6 @@ export default function FixturePage() {
         </div>
       )}
 
-      {/* Toast compartir */}
       {showShare && (
         <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 bg-plum-orange text-white rounded-2xl px-4 py-2 flex items-center gap-2 text-sm font-bold animate-pop shadow-lg">
           <Share2 className="w-4 h-4" />
@@ -189,9 +227,9 @@ export default function FixturePage() {
       {/* Bottom nav */}
       <nav className="fixed bottom-0 left-0 right-0 z-30 bg-plum-dark/95 backdrop-blur-md border-t border-white/10 safe-bottom">
         <div className="flex items-center justify-around px-4 py-3 max-w-md mx-auto">
-          <NavBtn icon="🏠" label="Inicio" onClick={() => router.push('/')} />
-          <NavBtn icon="⚽" label="Fixture" active />
-          <NavBtn icon="📊" label="Tabla" onClick={() => router.push('/tabla')} />
+          <NavBtn icon="🏠" label="Inicio"    onClick={() => router.push('/')} />
+          <NavBtn icon="⚽" label="Fixture"   active />
+          <NavBtn icon="📊" label="Tabla"     onClick={() => router.push('/tabla')} />
           <NavBtn icon="🔗" label="Compartir" onClick={handleCompartir} />
         </div>
       </nav>
@@ -199,6 +237,7 @@ export default function FixturePage() {
   )
 }
 
+// ── Tarjeta para fase de grupos ────────────────────────────────────────────
 function MatchCard({ partido, resultado, getEquipo, onScore }: {
   partido: Partido
   resultado?: Resultado
@@ -207,37 +246,30 @@ function MatchCard({ partido, resultado, getEquipo, onScore }: {
 }) {
   const local = getEquipo(partido.local)
   const visit = getEquipo(partido.visitante)
-  const completado = resultado?.goles_local !== null && resultado?.goles_visitante !== null
-    && resultado?.goles_local !== undefined && resultado?.goles_visitante !== undefined
-
   const gl = resultado?.goles_local
   const gv = resultado?.goles_visitante
-  const ganadorLocal = gl !== null && gl !== undefined && gv !== null && gv !== undefined && gl > gv
-  const ganadorVisit = gl !== null && gl !== undefined && gv !== null && gv !== undefined && gv > gl
+  const completado = gl !== null && gl !== undefined && gv !== null && gv !== undefined
+  const ganadorLocal = completado && gl > gv
+  const ganadorVisit = completado && gv > gl
 
   return (
     <div className={`match-card p-4 ${completado ? 'completed' : ''}`}>
-      {/* Fecha y estadio */}
       <div className="flex items-center justify-between mb-3">
-        <span className="text-xs text-white/40 font-medium">{partido.fecha} · {partido.hora}</span>
-        <span className="text-xs text-white/30 truncate ml-2 max-w-[140px]">{partido.estadio}</span>
+        <span className="text-xs text-white/40 font-medium">
+          P{partido.numero} · {partido.fecha} · {partido.hora}
+        </span>
+        <span className="text-xs text-white/30 truncate ml-2 max-w-[150px]">{partido.estadio}</span>
       </div>
 
-      {/* Equipos y marcador */}
       <div className="flex items-center gap-3">
-        {/* Local */}
         <div className={`flex-1 text-right transition-all ${ganadorLocal ? 'opacity-100' : ganadorVisit ? 'opacity-40' : 'opacity-100'}`}>
           <div className="text-2xl mb-1">{local?.bandera || '🏳️'}</div>
-          <div className="text-white text-xs font-bold leading-tight">
-            {local?.nombre || partido.local}
-          </div>
+          <div className="text-white text-xs font-bold leading-tight">{local?.nombre || partido.local}</div>
         </div>
 
-        {/* Score */}
         <div className="flex items-center gap-2 flex-shrink-0">
           <input
-            type="number"
-            min="0" max="99"
+            type="number" min="0" max="99"
             value={gl ?? ''}
             onChange={e => onScore(partido.id, 'local', e.target.value)}
             className={`score-input ${completado ? 'filled' : ''}`}
@@ -245,8 +277,7 @@ function MatchCard({ partido, resultado, getEquipo, onScore }: {
           />
           <span className="text-white/30 font-display text-xl">:</span>
           <input
-            type="number"
-            min="0" max="99"
+            type="number" min="0" max="99"
             value={gv ?? ''}
             onChange={e => onScore(partido.id, 'visitante', e.target.value)}
             className={`score-input ${completado ? 'filled' : ''}`}
@@ -254,16 +285,12 @@ function MatchCard({ partido, resultado, getEquipo, onScore }: {
           />
         </div>
 
-        {/* Visitante */}
         <div className={`flex-1 text-left transition-all ${ganadorVisit ? 'opacity-100' : ganadorLocal ? 'opacity-40' : 'opacity-100'}`}>
           <div className="text-2xl mb-1">{visit?.bandera || '🏳️'}</div>
-          <div className="text-white text-xs font-bold leading-tight">
-            {visit?.nombre || partido.visitante}
-          </div>
+          <div className="text-white text-xs font-bold leading-tight">{visit?.nombre || partido.visitante}</div>
         </div>
       </div>
 
-      {/* Indicador completado */}
       {completado && (
         <div className="mt-2 flex justify-center">
           <span className="text-xs text-yellow-400/70 flex items-center gap-1">
@@ -271,6 +298,134 @@ function MatchCard({ partido, resultado, getEquipo, onScore }: {
           </span>
         </div>
       )}
+    </div>
+  )
+}
+
+// ── Tarjeta para fases eliminatorias (con edición de equipos) ──────────────
+function EliminatoriaCard({ partido, resultado, equiposPersonalizados, onScore, onEquipo, getBandera }: {
+  partido: Partido
+  resultado?: Resultado
+  equiposPersonalizados: Record<string, string>
+  onScore: (id: string, lado: 'local' | 'visitante', val: string) => void
+  onEquipo: (key: string, valor: string) => void
+  getBandera: (codigo: string, custom: Record<string, string>) => string
+}) {
+  const keyLocal = `${partido.id}_local`
+  const keyVisit = `${partido.id}_visitante`
+  const nombreLocal    = equiposPersonalizados[keyLocal]    || partido.local
+  const nombreVisitante = equiposPersonalizados[keyVisit]   || partido.visitante
+  const banderaLocal   = getBandera(equiposPersonalizados[keyLocal]    ? '_custom' : partido.local,    equiposPersonalizados)
+  const banderaVisit   = getBandera(equiposPersonalizados[keyVisit]    ? '_custom' : partido.visitante, equiposPersonalizados)
+
+  const equipoLocal = EQUIPOS.find(e => e.nombre === equiposPersonalizados[keyLocal])
+  const equipoVisit = EQUIPOS.find(e => e.nombre === equiposPersonalizados[keyVisit])
+
+  const gl = resultado?.goles_local
+  const gv = resultado?.goles_visitante
+  const completado = gl !== null && gl !== undefined && gv !== null && gv !== undefined
+  const ganadorLocal = completado && gl > gv
+  const ganadorVisit = completado && gv > gl
+
+  return (
+    <div className={`match-card p-4 ${completado ? 'completed' : ''}`}>
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-xs text-white/40 font-medium">
+          P{partido.numero} · {partido.fecha} · {partido.hora}
+        </span>
+        <span className="text-xs text-white/30 truncate ml-2 max-w-[150px]">{partido.estadio}</span>
+      </div>
+
+      <div className="flex items-center gap-2">
+        {/* Equipo local */}
+        <div className={`flex-1 text-right transition-all ${ganadorLocal ? 'opacity-100' : ganadorVisit ? 'opacity-40' : 'opacity-100'}`}>
+          <div className="text-2xl mb-1">
+            {equipoLocal?.bandera || EQUIPOS.find(e => e.nombre === nombreLocal)?.bandera || '🏳️'}
+          </div>
+          <input
+            type="text"
+            value={equiposPersonalizados[keyLocal] || ''}
+            onChange={e => onEquipo(keyLocal, e.target.value)}
+            placeholder={partido.local}
+            className="w-full bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-white text-xs font-bold text-right focus:outline-none focus:border-plum-orange transition-colors placeholder-white/20"
+          />
+        </div>
+
+        {/* Score */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <input
+            type="number" min="0" max="99"
+            value={gl ?? ''}
+            onChange={e => onScore(partido.id, 'local', e.target.value)}
+            className={`score-input ${completado ? 'filled' : ''}`}
+            placeholder="-"
+          />
+          <span className="text-white/30 font-display text-xl">:</span>
+          <input
+            type="number" min="0" max="99"
+            value={gv ?? ''}
+            onChange={e => onScore(partido.id, 'visitante', e.target.value)}
+            className={`score-input ${completado ? 'filled' : ''}`}
+            placeholder="-"
+          />
+        </div>
+
+        {/* Equipo visitante */}
+        <div className={`flex-1 text-left transition-all ${ganadorVisit ? 'opacity-100' : ganadorLocal ? 'opacity-40' : 'opacity-100'}`}>
+          <div className="text-2xl mb-1">
+            {equipoVisit?.bandera || EQUIPOS.find(e => e.nombre === nombreVisitante)?.bandera || '🏳️'}
+          </div>
+          <input
+            type="text"
+            value={equiposPersonalizados[keyVisit] || ''}
+            onChange={e => onEquipo(keyVisit, e.target.value)}
+            placeholder={partido.visitante}
+            className="w-full bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-white text-xs font-bold text-left focus:outline-none focus:border-plum-orange transition-colors placeholder-white/20"
+          />
+        </div>
+      </div>
+
+      {/* Sugerencias de equipos */}
+      <TeamSuggest
+        keyField={keyLocal}
+        valor={equiposPersonalizados[keyLocal] || ''}
+        onSelect={(nombre) => onEquipo(keyLocal, nombre)}
+      />
+
+      {completado && (
+        <div className="mt-2 flex justify-center">
+          <span className="text-xs text-yellow-400/70 flex items-center gap-1">
+            <Check className="w-3 h-3" /> Guardado
+          </span>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Sugerencias de autocompletado ──────────────────────────────────────────
+function TeamSuggest({ keyField, valor, onSelect }: {
+  keyField: string
+  valor: string
+  onSelect: (nombre: string) => void
+}) {
+  if (!valor || valor.length < 2) return null
+  const sugerencias = EQUIPOS.filter(e =>
+    e.nombre.toLowerCase().includes(valor.toLowerCase()) && e.nombre !== valor
+  ).slice(0, 4)
+  if (!sugerencias.length) return null
+
+  return (
+    <div className="mt-2 flex flex-wrap gap-1.5">
+      {sugerencias.map(e => (
+        <button
+          key={e.codigo}
+          onClick={() => onSelect(e.nombre)}
+          className="flex items-center gap-1 bg-white/10 hover:bg-plum-orange/20 border border-white/10 hover:border-plum-orange/40 rounded-lg px-2 py-1 text-xs text-white/70 hover:text-white transition-all"
+        >
+          {e.bandera} {e.nombre}
+        </button>
+      ))}
     </div>
   )
 }

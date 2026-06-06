@@ -81,9 +81,9 @@ export default function FixturePage() {
 
   const handleCompartir = async () => {
     const url = generarURLCompartir(resultados)
-    const texto = `🍊 Mi Prode Plum Mundial 2026\n⚽ ${totalCompletados} partidos pronosticados\n${url}`
+    const texto = `🍊 Mi Fixture Plum Mundial 2026\n⚽ ${totalCompletados} partidos completados\n${url}`
     if (navigator.share) {
-      await navigator.share({ title: 'Mi Prode Plum Mundial', text: texto, url })
+      await navigator.share({ title: 'Mi Fixture Plum Mundial', text: texto, url })
     } else {
       navigator.clipboard.writeText(url)
       setShowShare(true)

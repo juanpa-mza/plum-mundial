@@ -92,6 +92,9 @@ export default function HomePage() {
           <div className="font-display text-2xl text-white/40 leading-none tracking-widest">
             2026
           </div>
+          <div className="font-display text-lg text-plum-orange/70 leading-none tracking-widest mt-1">
+            FIXTURE DIGITAL
+          </div>
         </div>
 
         {/* Tagline */}
@@ -104,7 +107,7 @@ export default function HomePage() {
           {[
             { icon: '⚽', label: 'Fixture completo' },
             { icon: '📊', label: 'Tabla en vivo' },
-            { icon: '🔗', label: 'Compartí tu prode' },
+            { icon: '🔗', label: 'Compartí tu fixture' },
           ].map((f, i) => (
             <div key={i} className="bg-white/5 rounded-2xl p-3 text-center border border-white/10">
               <div className="text-2xl mb-1">{f.icon}</div>
@@ -135,7 +138,7 @@ export default function HomePage() {
         >
           <div className="absolute inset-0 shimmer" />
           <span className="relative">
-            {showInput ? (nombre ? '¡Arrancar! 🚀' : 'Ingresá tu nombre') : 'Comenzar mi prode'}
+            {showInput ? (nombre ? '¡Arrancar! 🚀' : 'Ingresá tu nombre') : 'Comenzar mi fixture'}
           </span>
           <ChevronRight className="w-6 h-6 relative group-hover:translate-x-1 transition-transform" />
         </button>

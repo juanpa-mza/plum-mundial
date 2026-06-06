@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { EQUIPOS, GRUPOS } from '@/data/fixture'
+import { GRUPOS } from '@/data/fixture'
 import { cargarResultados, calcularTabla, type PosicionEquipo } from '@/lib/prode'
-import { Home, Trophy, Share2 } from 'lucide-react'
+import { Home, Trophy } from 'lucide-react'
 
 export default function TablaPage() {
   const router = useRouter()
@@ -30,6 +30,7 @@ export default function TablaPage() {
 
   return (
     <main className="min-h-dvh bg-plum-dark flex flex-col">
+
       {/* Header */}
       <header className="sticky top-0 z-30 bg-plum-dark/95 backdrop-blur-md border-b border-white/10 px-4 py-3">
         <div className="flex items-center justify-between mb-3">
@@ -59,6 +60,7 @@ export default function TablaPage() {
       </header>
 
       <div className="flex-1 px-4 py-4 pb-24">
+
         {/* Título grupo */}
         <div className="text-center mb-4">
           <h2 className="font-display text-3xl text-white">GRUPO {grupoActivo}</h2>
@@ -66,7 +68,7 @@ export default function TablaPage() {
         </div>
 
         {/* Leyenda */}
-        <div className="flex items-center gap-3 mb-3 px-1">
+        <div className="flex items-center gap-3 mb-3 px-1 flex-wrap">
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-3 rounded-sm bg-yellow-400" />
             <span className="text-white/40 text-xs">1°</span>
@@ -85,9 +87,8 @@ export default function TablaPage() {
           </div>
         </div>
 
-        {/* Tabla */}
+        {/* Tabla del grupo */}
         <div className="bg-white/5 rounded-2xl overflow-hidden border border-white/10">
-          {/* Header tabla */}
           <div className="grid grid-cols-[auto_1fr_repeat(6,_auto)] gap-1 px-3 py-2 text-xs text-white/30 font-bold border-b border-white/10">
             <span className="w-5">#</span>
             <span>Equipo</span>
@@ -124,7 +125,7 @@ export default function TablaPage() {
           })}
         </div>
 
-        {/* Vista rápida todos los grupos */}
+        {/* Resumen todos los grupos */}
         <div className="mt-6">
           <h3 className="font-display text-xl text-white/60 mb-3">Resumen todos los grupos</h3>
           <div className="grid grid-cols-2 gap-3">
@@ -139,7 +140,7 @@ export default function TablaPage() {
                   <div className="text-xs text-white/40 font-bold mb-2">GRUPO {g}</div>
                   {t.slice(0, 2).map((e, i) => (
                     <div key={e.codigo} className="flex items-center gap-1.5 mb-1">
-                      <span className="text-xs text-white/30 w-3">{i+1}°</span>
+                      <span className="text-xs text-white/30 w-3">{i + 1}°</span>
                       <span className="text-sm">{e.bandera}</span>
                       <span className="text-xs text-white/70 flex-1 truncate">{e.nombre}</span>
                       <span className="text-xs font-bold text-white">{e.PTS}</span>
@@ -159,12 +160,38 @@ export default function TablaPage() {
           </div>
         </div>
 
-        {/* Tabla de terceros */}
+        {/* Ranking de terceros */}
         <TablaTerceros tablas={tablas} />
+
       </div>
 
-// ── Tabla de los 12 terceros ───────────────────────────────────────────────
-function TablaTerceros({ tablas }: { tablas: Record<string, any[]> }) {
+      {/* Bottom nav */}
+      <nav className="fixed bottom-0 left-0 right-0 z-30 bg-plum-dark/95 backdrop-blur-md border-t border-white/10 safe-bottom">
+        <div className="flex items-center justify-around px-4 py-3 max-w-md mx-auto">
+          {[
+            { icon: '🏠', label: 'Inicio',    action: () => router.push('/') },
+            { icon: '⚽', label: 'Fixture',   action: () => router.push('/fixture') },
+            { icon: '📊', label: 'Tabla',     action: undefined, active: true },
+            { icon: '🔗', label: 'Compartir', action: () => router.push('/fixture') },
+          ].map((btn, i) => (
+            <button
+              key={i}
+              onClick={btn.action}
+              className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl ${btn.active ? 'text-plum-orange' : 'text-white/40'}`}
+            >
+              <span className="text-xl">{btn.icon}</span>
+              <span className="text-xs font-semibold">{btn.label}</span>
+            </button>
+          ))}
+        </div>
+      </nav>
+
+    </main>
+  )
+}
+
+// ── Ranking de los 12 terceros ─────────────────────────────────────────────
+function TablaTerceros({ tablas }: { tablas: Record<string, PosicionEquipo[]> }) {
   const terceros = Object.entries(tablas)
     .filter(([, t]) => t[2])
     .map(([grupo, t]) => ({ ...t[2], grupo }))
@@ -179,7 +206,6 @@ function TablaTerceros({ tablas }: { tablas: Record<string, any[]> }) {
       <h3 className="font-display text-xl text-white/60 mb-1">Ranking de Terceros</h3>
       <p className="text-xs text-white/30 mb-3">Los 8 mejores terceros clasifican a los dieciseisavos</p>
 
-      {/* Leyenda */}
       <div className="flex items-center gap-4 mb-3 px-1">
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 rounded-sm bg-green-500" />
@@ -192,7 +218,6 @@ function TablaTerceros({ tablas }: { tablas: Record<string, any[]> }) {
       </div>
 
       <div className="bg-white/5 rounded-2xl overflow-hidden border border-white/10">
-        {/* Header */}
         <div className="grid grid-cols-[auto_auto_1fr_repeat(5,_auto)] gap-1 px-3 py-2 text-xs text-white/30 font-bold border-b border-white/10">
           <span className="w-5">#</span>
           <span className="w-6">Gpo</span>
@@ -209,11 +234,10 @@ function TablaTerceros({ tablas }: { tablas: Record<string, any[]> }) {
           const rowClass = clasificado
             ? 'border-l-2 border-green-500 bg-green-950/20'
             : 'border-l-2 border-red-900 bg-red-950/10 opacity-60'
-
           return (
             <div
               key={`${equipo.codigo}-${equipo.grupo}`}
-              className={`grid grid-cols-[auto_auto_1fr_repeat(5,_auto)] gap-1 px-3 py-2.5 items-center border-b border-white/5 last:border-0 transition-all ${rowClass}`}
+              className={`grid grid-cols-[auto_auto_1fr_repeat(5,_auto)] gap-1 px-3 py-2.5 items-center border-b border-white/5 last:border-0 ${rowClass}`}
             >
               <span className="w-5 text-xs font-bold" style={{ color: clasificado ? '#4ade80' : '#f87171' }}>
                 {idx + 1}
@@ -240,31 +264,9 @@ function TablaTerceros({ tablas }: { tablas: Record<string, any[]> }) {
 
       {terceros.length < 12 && (
         <p className="text-center text-white/20 text-xs mt-3">
-          Faltan resultados de {12 - terceros.length} grupo{12 - terceros.length !== 1 ? 's' : ''} para completar el ranking
+          Faltan {12 - terceros.length} grupo{12 - terceros.length !== 1 ? 's' : ''} para completar el ranking
         </p>
       )}
     </div>
-  )
-}
-      <nav className="fixed bottom-0 left-0 right-0 z-30 bg-plum-dark/95 backdrop-blur-md border-t border-white/10 safe-bottom">
-        <div className="flex items-center justify-around px-4 py-3 max-w-md mx-auto">
-          {[
-            { icon: '🏠', label: 'Inicio',   action: () => router.push('/') },
-            { icon: '⚽', label: 'Fixture',  action: () => router.push('/fixture') },
-            { icon: '📊', label: 'Tabla',    action: undefined, active: true },
-            { icon: '🔗', label: 'Compartir', action: () => router.push('/fixture') },
-          ].map((btn, i) => (
-            <button
-              key={i}
-              onClick={btn.action}
-              className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl ${btn.active ? 'text-plum-orange' : 'text-white/40'}`}
-            >
-              <span className="text-xl">{btn.icon}</span>
-              <span className="text-xs font-semibold">{btn.label}</span>
-            </button>
-          ))}
-        </div>
-      </nav>
-    </main>
   )
 }

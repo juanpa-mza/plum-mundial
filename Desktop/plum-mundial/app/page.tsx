@@ -78,7 +78,7 @@ export default function HomePage() {
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-8 text-center">
         {/* Logo Plum */}
         <div className="mb-4 animate-float" style={{ filter: 'drop-shadow(0 0 30px rgba(255,107,0,0.5))' }}>
-          <img src="/logo-plum.png" alt="Jugos Plum" className="w-28 h-28 object-contain mx-auto" />
+          <img src="/logo-plum.png" alt="Jugos Plum" className="w-28 h-28 object-contain mx-auto rounded-full" />
         </div>
 
         {/* Logo texto */}

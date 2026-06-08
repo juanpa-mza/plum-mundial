@@ -43,15 +43,19 @@ export default function FixturePage() {
     if (saved) setEquiposPersonalizados(JSON.parse(saved))
   }, [])
 
-  const handleScore = useCallback((partidoId: string, lado: 'local' | 'visitante', valor: string) => {
+  const handleScore = useCallback((partidoId: string, lado: 'local' | 'visitante' | 'penales_local' | 'penales_visitante', valor: string) => {
     const num = valor === '' ? null : Math.max(0, Math.min(99, parseInt(valor) || 0))
     setResultados(prev => {
+      const actual = prev[partidoId] || { partido_id: partidoId, goles_local: null, goles_visitante: null }
       const nuevo = {
         ...prev,
         [partidoId]: {
+          ...actual,
           partido_id: partidoId,
-          goles_local:     lado === 'local'     ? num : (prev[partidoId]?.goles_local     ?? null),
-          goles_visitante: lado === 'visitante' ? num : (prev[partidoId]?.goles_visitante ?? null),
+          goles_local:        lado === 'local'             ? num : actual.goles_local,
+          goles_visitante:    lado === 'visitante'         ? num : actual.goles_visitante,
+          penales_local:      lado === 'penales_local'     ? num : (actual as any).penales_local     ?? null,
+          penales_visitante:  lado === 'penales_visitante' ? num : (actual as any).penales_visitante ?? null,
         }
       }
       guardarResultados(nuevo)
@@ -323,9 +327,12 @@ function EliminatoriaCard({ partido, resultado, equiposPersonalizados, onScore, 
 
   const gl = resultado?.goles_local
   const gv = resultado?.goles_visitante
+  const pl = (resultado as any)?.penales_local
+  const pv = (resultado as any)?.penales_visitante
   const completado = gl !== null && gl !== undefined && gv !== null && gv !== undefined
-  const ganadorLocal = completado && gl > gv
-  const ganadorVisit = completado && gv > gl
+  const empate = completado && gl === gv
+  const ganadorLocal = completado && (gl > gv || (empate && pl !== null && pl !== undefined && pv !== null && pv !== undefined && pl > pv))
+  const ganadorVisit = completado && (gv > gl || (empate && pl !== null && pl !== undefined && pv !== null && pv !== undefined && pv > pl))
 
   return (
     <div className={`match-card p-4 ${completado ? 'completed' : ''}`}>
@@ -384,6 +391,32 @@ function EliminatoriaCard({ partido, resultado, equiposPersonalizados, onScore, 
           />
         </div>
       </div>
+
+      {/* Penales — aparecen solo si hay empate */}
+      {empate && (
+        <div className="mt-3 flex items-center justify-center gap-3 animate-slide-up">
+          <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-2xl px-3 py-2 flex items-center gap-3">
+            <span className="text-xs text-yellow-400/80 font-bold uppercase tracking-wider">🥅 Penales</span>
+            <input
+              type="number" min="0" max="20"
+              value={pl ?? ''}
+              onChange={e => onScore(partido.id, 'penales_local', e.target.value)}
+              placeholder="-"
+              className="score-input"
+              style={{ borderColor: '#eab308', background: 'rgba(234,179,8,0.12)', color: '#fde047', width: '44px', height: '44px', fontSize: '1.1rem' }}
+            />
+            <span className="text-yellow-500/50 font-display text-lg">-</span>
+            <input
+              type="number" min="0" max="20"
+              value={pv ?? ''}
+              onChange={e => onScore(partido.id, 'penales_visitante', e.target.value)}
+              placeholder="-"
+              className="score-input"
+              style={{ borderColor: '#eab308', background: 'rgba(234,179,8,0.12)', color: '#fde047', width: '44px', height: '44px', fontSize: '1.1rem' }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Sugerencias de equipos */}
       <TeamSuggest

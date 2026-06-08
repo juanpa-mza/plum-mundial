@@ -246,7 +246,7 @@ function MatchCard({ partido, resultado, getEquipo, onScore }: {
   partido: Partido
   resultado?: Resultado
   getEquipo: (c: string) => any
-  onScore: (id: string, lado: 'local' | 'visitante', val: string) => void
+  onScore: (id: string, lado: 'local' | 'visitante' | 'penales_local' | 'penales_visitante', val: string) => void
 }) {
   const local = getEquipo(partido.local)
   const visit = getEquipo(partido.visitante)
@@ -311,7 +311,7 @@ function EliminatoriaCard({ partido, resultado, equiposPersonalizados, onScore, 
   partido: Partido
   resultado?: Resultado
   equiposPersonalizados: Record<string, string>
-  onScore: (id: string, lado: 'local' | 'visitante', val: string) => void
+  onScore: (id: string, lado: 'local' | 'visitante' | 'penales_local' | 'penales_visitante', val: string) => void
   onEquipo: (key: string, valor: string) => void
   getBandera: (codigo: string, custom: Record<string, string>) => string
 }) {
